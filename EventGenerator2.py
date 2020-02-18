@@ -9,9 +9,12 @@ import time
 import sys
 from colorama import init, Fore, Back, Style
 
-#since the random user API tops out at 500, recommend calling with `repeat 5 {}` in your terminal, where '5' is your preferred multiple
+# To use:
+# python EventGenerator2.py [INDUSTRY] [NUMBER OF USERS]
+# e.g., python EventGenerator2.py saas 1000
 
-#################### Optional Settings Overrides ####################
+
+#################### Config Options ####################
 
 anonymize = False
 # anonymize = True
@@ -19,10 +22,11 @@ anonymize = False
 # addSensitiveInfo = False
 addSensitiveInfo = True
 
-SEGMENT_WRITE_KEY = "" #Optionally, override the write_key here.
-#"mZEzm3BGJGP6rw3pT0OcJvE1zT8VyU3S"
+SEGMENT_WRITE_KEY = "" #Optionally, override the write_key here. Otherwise, the write_key set in the EventData dict will apply.
+
 
 NUMBER_OF_USERS = 500 #default
+DELAY_BETWEEN_USERS = 1 #time.sleep seconds to wait between users (for a 'live' debugger throughout your demo)
 
 # sendGroupCall = False
 sendGroupCall = True
@@ -34,21 +38,100 @@ companyData = [(45138, "Segment", "SaaS"), (28152, "Walmart", "Retail"), (61949,
 eventData = {
 	"media": {
 		"write_key": "6f4pcfvQXv60D3gWgB1YUAW8N5A82Tu8",
-		"eventsWithProps": ["Playlist Generated", "Song Played", "Connect Spotify", "Search Query", "Page Viewed", "Video Playback Started", "Video Playback Paused", "Video Playback Interrupted", "Video Playback Buffer Completed", "Video Playback Seek Started", "Video Playback Seek Completed", "Video Playback Resumed", "Video Playback Completed", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing"],
+		"eventsWithProps": ["Playlist Generated", "Song Played", "Connect Spotify", "Search Query", "Page Viewed", "Video Playback Started", "Video Playback Paused", "Video Playback Interrupted", "Video Playback Buffer Completed", "Video Playback Seek Started", "Video Playback Seek Completed", "Video Playback Resumed", "Video Playback Completed", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Video Content Playing", "Subscription Completed", "Comment Posted", "Subscription Canceled", "Article Viewed"],
 		"eventsNoProps": ["Application Installed", "Application Opened", "Application Updated", "Application Backgrounded", "Application Crashed", "Application Uninstalled", "Push Notification Received"],
 
 		"strings": {
-			"title": ["Seinfeld", "Game of Thrones", "New Girl", "The Americans", "Breaking Bad", "Better Call Saul", "Big Little Lies", "The Good Place", "One Day at a Time", "Killing Eve", "Insecure", "Riverdale", "Atlanta", "Stranger Things", "Westworld", "Curb Your Enthusiasm", "Fargo", "Mr. Robot", "Twin Peaks"],
-			"genre": ["Comedy", "Drama", "Reality", "Action", "Family", "Kids 3-8", "Kids 9-12", "Kids 12+",],
-			"music_genre": ["R&B", "Rap", "Indie Rock", "Dream Pop", "Pop Rock", "Pop"],
-			"show": ["La Reina Soy Yo", "Por Amar Sin Ley", "Despierta America"],
-			"artist": ["Dua Lipa", "Ed Sheeran", "Jason Derulo", "Madonna", "Wiz Khalifa", "Camila Cabello", "Metallica", "Rihanna", "The Mountain Goats", "Vampire Weekend", "Jay-Z", "Kanye West", "Taylor Swift", "HAIM", "Car Seat Headrest", "Shania Twain", "John Mayer", "Bleachers"],
+			# "title": ["Seinfeld", "Game of Thrones", "New Girl", "The Americans", "Breaking Bad", "Better Call Saul", "Big Little Lies", "The Good Place", "One Day at a Time", "Killing Eve", "Insecure", "Riverdale", "Atlanta", "Stranger Things", "Westworld", "Curb Your Enthusiasm", "Fargo", "Mr. Robot", "Twin Peaks"],
+			# "genre": ["Comedy", "Drama", "Reality", "Action", "Family", "Kids 3-8", "Kids 9-12", "Kids 12+",],
+			"content_section": ["News","Sports","Entertainment","Life","Money","Tech","Travel","Opinion","Weather","Op/Ed"],
+			"content_tags": ["environment","trump","parenting","food","celebrities","travel","stocks","personal finance", "mma","nfl","college","china","trade war"],
+			"article_title": ['Millennials "kill" food? They just eat differently', 'Disney names new ship, second private island',"Bachelorette's Jojo, Jordan Rogers engaged again","US banana imports on alert as disease hits Colombia","Luck retirement reminder of football's human toll", "Starbucks' new Pumpkin Cream Cold Brew hits Tuesday", "Your home made simple","Tourists on scooters end up on busy highway", "21-year-old MLB star could become all-time great"],
+			"article_format": ["text","video","multimedia","interactive"],
+			# "music_genre": ["R&B", "Rap", "Indie Rock", "Dream Pop", "Pop Rock", "Pop"],
+			# "show": ["La Reina Soy Yo", "Por Amar Sin Ley", "Despierta America"],
+			# "artist": ["Dua Lipa", "Ed Sheeran", "Jason Derulo", "Madonna", "Wiz Khalifa", "Camila Cabello", "Metallica", "Rihanna", "The Mountain Goats", "Vampire Weekend", "Jay-Z", "Kanye West", "Taylor Swift", "HAIM", "Car Seat Headrest", "Shania Twain", "John Mayer", "Bleachers"],
 			"full episode": [True, False],
 			"ad_type": ["pre-roll", "mid-roll", "post-roll"]
 		},
 		"ints": {
-			"season": 10,
-			"episode": 26,
+			# "season": 10,
+			# "episode": 26,
+			"total_length": 3600,
+			"framerate": 60,
+			"position": 3600,
+			"percentage_completed": 100,
+			"search_results": 20
+		}
+	},
+	"thrive": {
+		"write_key": "zLXUCkdXcFBr1P4S7uMiWqeBKjaeYHe8",
+		"eventsWithProps": ["Landing Page Loaded","Page Viewed","Content Viewed","Content Saved","Content Shared","Signup Started","Signup Failure","Screen Viewed","Feed Viewed","Category Viewed","Category Subscribed","Search","Microstep Completed","Company Signup","Newsletter Signup"],
+		"eventsNoProps": [""],
+
+		"strings": {
+			"content_section": ["Well-Being","Wisdom","Wonder","Purpose","Sleep","Special Sections","Community"],
+			"content_category": ["Well-Being","Wisdom","Wonder","Purpose","Sleep","Special Sections","Community"],
+			"contentTags": ["environment","parenting","food","travel","personal finance"],
+			"content_title": ["'The 10-Percent Meeting Rule' and Other Ways Workplaces are Keeping People Engaged", "It's normal to stress about aging - but there's reason to be optimistic","Eater Editor-in-Chief Amanda Kludt on the joys of comfort food and dinner parties, and her favorite ways to recharge","Here's how to protect yourself from blue light's harmful side effects","Constance Wu is changing the way we speak to young girls"],
+			"content_format": ["text","video","multimedia","interactive"],
+			"company": ["Segment", "Walmart", "Apple", "Amazon","Microsoft", "Facebook","Google","AT&T","Palantir","Cisco","Samsung","Qualcomm","Tencent","Slack"],
+			"current_feature": ["Microsteps","Content","Journeys","Thrive for Companies"],
+			"ad_type": ["pre-roll", "mid-roll", "post-roll"]
+		},
+		"ints": {
+			# "season": 10,
+			# "episode": 26,
+			"total_length": 3600,
+			"framerate": 60,
+			"position": 3600,
+			"percentage_completed": 100,
+			"search_results": 20
+		}
+	},	
+	"thrive-ios": {
+		"write_key": "Xey3yaJDpI578YIOCRPEC9dPQyuvktde",
+		"eventsWithProps": ["Content Viewed","Content Saved","Content Shared","Signup Started","Signup Failure","Screen Viewed","Feed Viewed","Category Viewed"],
+		"eventsNoProps": [""],
+
+		"strings": {
+			# "content_section": ["Well-Being","Wisdom","Wonder","Purpose","Sleep","Special Sections","Community"],
+			# "content_category": ["Well-Being","Wisdom","Wonder","Purpose","Sleep","Special Sections","Community"],
+			"contentTags": ["environment","parenting","food","travel","personal finance"],
+			"content_title": ["'The 10-Percent Meeting Rule' and Other Ways Workplaces are Keeping People Engaged", "It's normal to stress about aging - but there's reason to be optimistic","Eater Editor-in-Chief Amanda Kludt on the joys of comfort food and dinner parties, and her favorite ways to recharge","Here's how to protect yourself from blue light's harmful side effects","Constance Wu is changing the way we speak to young girls"],
+			"content_format": ["text","video","multimedia","interactive"],
+			"company": ["Segment", "Walmart", "Apple", "Amazon","Microsoft", "Facebook","Google","AT&T","Palantir","Cisco","Samsung","Qualcomm","Tencent","Slack"],
+			"current_feature": ["Microsteps","Content","Journeys","Thrive for Companies"],
+			"ad_type": ["pre-roll", "mid-roll", "post-roll"]
+		},
+		"ints": {
+			# "season": 10,
+			# "episode": 26,
+			"total_length": 3600,
+			"framerate": 60,
+			"position": 3600,
+			"percentage_completed": 100,
+			"search_results": 20
+		}
+	},
+	"thrive-android": {
+		"write_key": "bHKHh4xUPa9RfKSXQlJJwR3aiukykURu",
+		"eventsWithProps": ["Content Viewed","Content Saved","Content Shared","Signup Started","Screen Viewed","Feed Viewed","Category Viewed"],
+		"eventsNoProps": [""],
+
+		"strings": {
+			# "content_section": ["Well-Being","Wisdom","Wonder","Purpose","Sleep","Special Sections","Community"],
+			# "content_category": ["Well-Being","Wisdom","Wonder","Purpose","Sleep","Special Sections","Community"],
+			"contentTags": ["environment","parenting","food","travel","personal finance"],
+			"content_title": ["'The 10-Percent Meeting Rule' and Other Ways Workplaces are Keeping People Engaged", "It's normal to stress about aging - but there's reason to be optimistic","Eater Editor-in-Chief Amanda Kludt on the joys of comfort food and dinner parties, and her favorite ways to recharge","Here's how to protect yourself from blue light's harmful side effects","Constance Wu is changing the way we speak to young girls"],
+			"content_format": ["text","video","multimedia","interactive"],
+			"company": ["Segment", "Walmart", "Apple", "Amazon","Microsoft", "Facebook","Google","AT&T","Palantir","Cisco","Samsung","Qualcomm","Tencent","Slack"],
+			"current_feature": ["Microsteps","Content","Journeys","Thrive for Companies"],
+			"ad_type": ["pre-roll", "mid-roll", "post-roll"]
+		},
+		"ints": {
+			# "season": 10,
+			# "episode": 26,
 			"total_length": 3600,
 			"framerate": 60,
 			"position": 3600,
@@ -58,24 +141,53 @@ eventData = {
 	},
 	"saas": {
 		"write_key": "mUFv8S1qOc7q8cbfpdbMZvnKonZPCEfd",
-		"eventsWithProps": ["Dashboard Element Added", "Dashboard Element Removed", "Marketing Page Viewed", "Trial Page Viewed", "Trial Started", "Invite User", "View Dashboard", "Launch App", "Trial Expired", "Plans Viewed", "Plan Selected", "Billing Run", "Cancellation Initiated", "Cancellation Completed", "Support Request", "Request Quote", "Content Viewed", "Alert Sent", "Alert Received", "Alert Forwarded", "Request Demo", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Hit Paywall", ],
+		"eventsWithProps": ["Dashboard Element Added", "Dashboard Element Removed", "Marketing Page Viewed", "Trial Page Viewed", "Trial Started", "Invite User", "View Dashboard", "Launch App", "Trial Expired", "Plans Viewed", "Plan Selected", "Billing Run", "Cancellation Initiated", "Cancellation Completed", "Support Request", "Request Quote", "Content Viewed", "Alert Sent", "Alert Received", "Alert Forwarded", "Request Demo", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Hit Paywall", "Expert Session Started", "Content Viewed"],
 		# "Browse Course Category", "View Course", "Course Signup", "Course Started", "Course Completed"
 		"eventsNoProps": [],
 
 		"strings": {
-			"current_product": ["PROTECT", "OPTICS", "ThreatZERO", "Smart Antivirus"],
+			# "current_product": ["PROTECT", "OPTICS", "ThreatZERO", "Smart Antivirus"],
+			"acquisition_campaign": ["IP Backbone CTA Winter 2019","Organic"],
 			"current_trial_status": ["Pre-Trial", "Active Trial", "Lapsed", "Subscribed"],
+			"current_channel": ["SMS","Email","Livechat"],
 			"current_plan": ["Basic", "Standard", "Advanced", "Lite", "Plus"],
+			# "current_feature_type": ["Data Management","Governance","News & Insight","Research & Analytics","Trading & Investing"],
+			# "current_product_line": ["CEM","Digital Process Automation","Business Network","ECM","Discovery","Security","AI & Analytics"],
+			"current_product": ["EtherVision","My Services","Matrix"],
+			# "current_feature": ["Eikon","World-Check","Eikon Messenger","AutoAudit","Transaction Monitoring","Country Risk Ranking","Enhanced Due Diligence","Verified Entity Data as a Service"],
 			# "current_topic": ["Computer & Mobile Forensics", "Security+", "Ethical Hacking", "CISA"],
 			# "current_certification": ["CISSP", "CEH", "CISA", "PMP", "CCNA"],
 			# "current_feature": ["Support", "Sales Channels", "Manual Order Creation", "Abandoned Cart Recovery", "Gift Cards", "Advanced Report Builder", "Shipping", "Fraud Analysis", "POS App"],
-			"current_feature": ["Malware Prevention", "Script Management", "Application Control", "Device Usage Reports", "Console Reporting", "Antivirus"],
+			# "current_feature": ["Malware Prevention", "Script Management", "Application Control", "Device Usage Reports", "Console Reporting", "Antivirus"],
 			"premium_feature?": [True, False],
+			# "content_vertical": ["Automotive","Energy","Engineering","Legal","insurance","Public Sector","Utilities","Media","Life sciences","Healthcare","Financial Services"],
+			# "content_topic": ["ECM","SAP","Oracle","eDOCS","Connectivity","Information security and privacy","Corporate social responsibility","GDPR","Industry regulatory compliance"],
+			# "content_title": ["Top 7 benefits of supply chain optimization","The lawyer's growing role in cybersecurity","Creative collaboration for industry-leading enterprise DAM","Realizing the benefits of EIM managed services"],
+			# "online_security_status": ["Compromised","Secure"],
+			# "device_software_status": ["Up-to-date", "Outdated","At Risk"],
+			# "online_presence_status": ["Review needed"],
 			"current_role": ["Admin", "User", "Analytics Viewer"],
 			# "shop_type": ["Dropshipping", "Standard Store", "Facebook Messenger Store", "Brick-and-Mortar"]
 		},
 		"ints": {
 			"ARR": 100000,
+			# "course_level": (0,10)
+		}
+	},
+	"fluxx": {
+		"write_key": "mUFv8S1qOc7q8cbfpdbMZvnKonZPCEfd",
+		"eventsWithProps": ["Content Viewed","Feature Usage","Login","Grant Viewed","Grant Shared","Grant Application Started","Grant Application Submitted","Grant Status Viewed"],
+		# "Browse Course Category", "View Course", "Course Signup", "Course Started", "Course Completed"
+		"eventsNoProps": [],
+
+		"strings": {
+			"current_product": ["Grantmaker","Grantseeker"],
+			"current_feature": ["Dashboards","Workflows","Email Notifications","Application Status Tracker","Integrations","Grant Discovery","Grant Organization","Funder Organization"],
+			"current_role": ["Grantee","Funder"],
+			# "shop_type": ["Dropshipping", "Standard Store", "Facebook Messenger Store", "Brick-and-Mortar"]
+		},
+		"ints": {
+			"lifetime_grants": 100000,
 			# "course_level": (0,10)
 		}
 	},
@@ -120,6 +232,27 @@ eventData = {
 			"ARR": 100000
 		}
 	},
+	"motif": {
+		"write_key": "GKJoTJPfMqKScHJxUfHeYqrr4JMIDsdx",
+		"eventsWithProps": ["App Launched","Signup Started","Signup Completed","Photos Loaded","Convert from Apple Photos","Layouts Browsed","Layout Previewed","Layout Selected","Backgrounds Browsed","Background Previewed","Image Edited","Text Edited","Support Request Started","Support Request Resolved","Print Options Browed","Print Option Viewed","Print Checkout Started","Print Checkout Completed","Print Delivery Confirmed","Review Started","Review Submitted","App Crashed","Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage", "Feature Usage"],
+		"eventsNoProps": [],
+
+		"strings": {
+			"current_platform":["iOS,Mac"],
+			"feature": ["Intelligent Selection","Autoflow","Image Editor","Text Editor","Apple Photos Converter"],
+			"print_type": ["Photo Book","Photo Calendar","Photo Card"],
+			"print_subtype":["Hardcover","Softcover","Folded","Flat"],
+			"photo_selection":["Intelligent Selection","Manual"],
+			"customized?": [True,False],
+			"coupon_code": ["None","ShipItFree2020"],
+			"autoflow_enabled": [True,False]
+		},
+		"ints": {
+			"lifetime_value": (0,2000),
+			"photo_quantity": (1,100),
+			"price": (1,150)
+		}
+	},
 	"education": {
 		"write_key": "mUFv8S1qOc7q8cbfpdbMZvnKonZPCEfd",
 		"eventsWithProps": ["Marketing Page Viewed", "Trial Page Viewed", "Trial Requested", "Invite User", "View Dashboard", "Launch App", "Trial Expired", "Plans Viewed", "Plan Selected", "Billing Run", "Cancellation Initiated", "Cancellation Completed", "Support Request Initiated", "Request Quote", "Request Demo", "Lesson Started", "Lesson Completed", "Lesson Paused", "Lesson Signup", "Class Attended", "Program Completed", "Feature Usage", "Enrollment Started", "Enrollment Completed", "Application Started","Application Completed", "Course Dropped", "Student Portal Launched", "Message Sent", "Message Opened", "Blackboard Login", "Blackboard Home Viewed", "Support Page Viewed"],
@@ -138,42 +271,35 @@ eventData = {
 			"class_level": (1,50),
 			"days_since_login": (0,20),
 			"class_id": 9999,
-			"degree_progress": (0,100)
+			"degree_progress_%": (0,100)
 		}
 	},
 	"retail": {
 		"write_key": "0QOx6XUUIM1kokYyAHdEelDIsg1z2M20",
-		"eventsWithProps": ["In-Store Visit", "Appointment Set", "Page Viewed", "Products Searched", "Product List Viewed", "Product List Filtered", "Promotion Viewed", "Promotion Clicked", "Product Clicked", "Product Viewed", "Product Added", "Product Removed", "Cart Viewed", "Checkout Started", "Checkout Step Viewed", "Checkout Step Completed", "Payment Info Entered", "Order Completed", "Order Updated", "Order Refunded", "Order Cancelled", "Loyalty Signup Started", "Loyalty Signup Completed", "Catalog Signup", "Return Initiated", "Return Complete", "Gift Card Purchased", "Store Locator Activated","View Today's Offers", "Store Finder Launched", "Size Guide Launched", "App Launched", "Cart Abandoned", "Nutritional Info Viewed", "Delivery Order Started","Delivery Order Completed", "MyBK Launched", "View Coupon", "Receive Coupon", "Use Coupon"],
+		"eventsWithProps": ["In-Store Visit", "Appointment Set", "Page Viewed", "Products Searched", "Product List Viewed", "Product List Filtered", "Promotion Viewed", "Promotion Clicked", "Product Clicked", "Product Viewed", "Product Added", "Product Removed", "Cart Viewed", "Checkout Started", "Checkout Step Viewed", "Checkout Step Completed", "Payment Info Entered", "Order Completed", "Order Updated", "Order Refunded", "Order Cancelled", "Loyalty Signup Started", "Loyalty Signup Completed", "Catalog Signup", "Return Initiated", "Return Complete", "Gift Card Purchased", "Store Locator Activated","View Today's Offers", "Store Finder Launched", "Size Guide Launched", "App Installed", "App Downloaded", "App Launched", "Cart Abandoned", "View Coupon", "Receive Coupon", "Use Coupon"],
 		"eventsNoProps": [],
 
 		"strings": {
-			# "category": ["Electronics", "Shirts", "T-Shirts", "Shoes", "Dresses", "Jewelry"],
-			# "occasion": ["Mother's Day", "Birthday", "Sympathy", "Get Well", "Housewarming", "New Baby", "Retirement"],
-			# "flower_type": ["Carnations", "Daisies", "Lilies", "Mixed Bouquets", "Orchids", "Roses","Sunflowers","Tulips"],
-			# "category": ["Pants","Jeans","Sweaters","Tees and Knits","Blouses and Shirts","Jackets and Outerwear","Dresses","Skirts","Suiting","Lounge","Shorts","Sun & Swim","Intimates"],
-			# "product_name": ["Cutout Racerback Tank", "Fallon Printed Wide-Leg Pants", "Santa Maria Maxi Dress", "Lucy Overalls", "Carmen Top", "High Tides Mini", "City of Angels Cami", "Under the Moonlight Maxi Dress"],
-			"product_name": ["Impossible Whopper","Rodeo King", "Triple Stacker King", "Double Stacker King", "Single Stacker King"],
-			"product_category": ["Burgers","Chicken & More","Salads & Veggies","Beverages", "Breakfast","Coffee","Sides"],
-			"coupon_code": ["FRIENDS30","BKNOW","SUMMERTIME"],
+			# General
+			"coupon_code": ["FRIENDS30","SUMMERTIME"],
 			"day_of_week": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			"time_of_day": ["Early Morning","Morning","Afternoon","Late Afternoon","Evening"],
-			# "partner_brand": ["Keds", "Sperry", "Superga"],
-			# "product_tags": ["New Arrivals", "T By Talbots", "Work Shop", "Linen Shop", "Petite", "Keds", "Sperry", "Superga"],
-			# "brand": ["Altra", "Icebreaker", "Smartwool", "The North Face", "Timberland", "Eagle Creek", "Eastpak", "JanSport", "Kipling", "Napapijri", "Vans", "Terra", "Lee", "Wrangler"],
-			# "brand_category": ["Outdoor", "Active", "Work", "Jeans"],
-			# "brands": ["Nike", "Outdoor Voices", "Urban Outfitters", "Anthropologie", "ASOS", "Supreme", "Sephora", "Bonobos"],
 			"current_platform": ["Web", "In-Store", "Mobile Web", "Mobile Native"],
 			"messaging_preferences": ["Push", "Email", "Text"],
 			"messaging_status": ["Opt-In"],
 			"loyalty_status": ["None", "Active", "Premium"],
-			# "credit_card_member": [True,False],
 			"subscriptions": ["Back-in-Stock Notification"],
 			"social_channel": ["Instagram", "Facebook", "Pinterest", "Twitter", "YouTube"],
-			"utm_campaign": ["summer-2019"]
-			# "current_brand": ["1-800-Flowers", "Harry & David", "1-800 Baskets", "Simply Chocolate", "Cheryl's Cookies", "Personalization Universe", "The Popcorn Factory", "Wolferman's", "Stock Yards", "Goodsey"]
+			"utm_campaign": ["summer-sale"],
+			#Custom
+			"product_category": ["Jackets","Jeans","Sweatshirts","Tees"],
+			"product_subcategory": ["Vintage","Cropped","High-Rise","Destructed"],
+			"product_tags": ["Vintage","Cropped","High-Rise","Destructed","Apres Ski","Slim","Cropped","Flare","Acid Wash","Retro"],
+			"product_promotion": ["Free Shipping","Clearance","Lookbook"],
+			"search_filters": ["Size","Color","Type"],
 		},
 		"ints": {
-			"price": 300,
+			"price": (70,250),
 			"discount_%": 30,
 			"coupon_%": 30,
 			"search_results": (0,25),
@@ -187,8 +313,8 @@ eventData = {
 		}
 	},
 	"freepeople": {
-		"write_key": "1NVSv2OEBHE77kWCfueMC9JPfLgVgIHa", #lone dataset
-		# "write_key": "0QOx6XUUIM1kokYyAHdEelDIsg1z2M20", #diggory01
+		# "write_key": "1NVSv2OEBHE77kWCfueMC9JPfLgVgIHa", #separate dataset
+		"write_key": "0QOx6XUUIM1kokYyAHdEelDIsg1z2M20", #diggory01
 		"eventsWithProps": ["In-Store Visit", "Appointment Set", "Page Viewed", "Products Searched", "Product List Viewed", "Product List Filtered", "Promotion Viewed", "Promotion Clicked", "Product Clicked", "Product Viewed", "Product Added", "Product Removed", "Cart Viewed", "Checkout Started", "Checkout Step Viewed", "Checkout Step Completed", "Payment Info Entered", "Order Completed","Order Completed","Order Completed","Order Completed","Order Completed","Order Completed","Order Completed","Order Completed","Order Completed", "Order Updated", "Order Refunded", "Order Cancelled", "Loyalty Signup Started", "Loyalty Signup Completed", "Catalog Signup", "Return Initiated", "Return Complete", "Gift Card Purchased", "Store Locator Activated","View Today's Offers", "Store Finder Launched", "Size Guide Launched", "App Launched", "Cart Abandoned", "Message Viewed"],
 		"eventsNoProps": [],
 
@@ -334,18 +460,32 @@ eventData = {
 	},
 	"finserv": {
 		"write_key": "nRiCwhsHA8H3pJ1D5dm70wZmRTpNX1qA",
-		# "eventsWithProps": ["App Launched", "Account Closure Options Viewed", "Account Closure Requested", "Account Closed", "Screen Viewed", "Balance Checked", "P2P Payment Started", "P2P Payment Completed", "Support Request Opened", "Support Request Completed", "Financial Advisor Message Sent", "Account Balance Viewed", "Password Reset", "Credit Increase Requested", "Payment Submitted"],
-		"eventsWithProps": ["Home Screen Viewed", "Savings Account Viewed", "Savings Account Opened", "Auto-Deposit Completed", "Credit Score Viewed", "App Launched", "Spending Report Viewed", "Cancellation Page Viewed", "Cancellation Requested", "Account Canceled", "Screen Viewed", "Balance Checked", "Budget Checked", "View Subscriptions", "Support Request Opened", "Support Request Completed", "Account Balance Viewed", "Password Reset", "Saving Goal Set", "Cancel Subscription", "Trade Initiated", "Trade Confirmed", "Fund Viewed", "Customer Contact", "Content Viewed", "401k Deposit Completed", "401k Withdrawal Completed"],
+		# "eventsWithProps": ["Content Viewed","Lead Form Submitted","Search","Content Saved","Content Saved","Page Viewed","Partner Clickthrough","Affiliate Clickthrough", "Questionnaire Started","Questionnaire Completed"],
+		"eventsWithProps": ["Home Screen Viewed", "Savings Account Viewed", "Savings Account Opened", "Auto-Deposit Completed", "Credit Score Viewed", "App Launched", "Spending Report Viewed", "Cancellation Page Viewed", "Cancellation Requested", "Account Canceled", "Screen Viewed", "Balance Checked", "Budget Checked", "View Subscriptions", "Support Request Opened", "Support Request Completed", "Account Balance Viewed", "Password Reset", "Saving Goal Set", "Cancel Subscription", "Trade Initiated", "Trade Confirmed", "Fund Viewed", "Customer Contact", "Content Viewed", "401k Deposit Completed", "401k Withdrawal Completed", "View Loan Status", "Application Started","Application Completed","Application Approved","Balance Viewed","Payment Started","Payment Completed", "Product Page Viewed","Marketing Page Viewed","Lead Form Submitted","CTA Clicked", "Research Content Viewed", "Research Content Shared"],
 		"eventsNoProps": [],
 
 		"strings": {
-			"current_feature": ["Budget", "Auto-Deposit", "Saving Goals", "Subscription Manager", "Credit Score", "Savings Account"],
+			"current_feature": ["Research","Trading Platform","Wealth Management","Institutional"],
+			"current_account_type": ["Savings","Checking","Investment"],
 			"current_offering": ["FA Portal","Education","Institutional Investments","Wealth Management Portal"],
+			# "current_product": ["Credit Services","CareCredit","Loyalty","Synchrony Connect","MySynchrony"],
+			# "current_offering": ["Retail Financing","Healthcare Financing","Online Savings","Business","Connect"],
+			# "account_type":["Consumer","Business"],
+			# "payment_type":["Current Balance","Current Due","Custom"],
+			# "credit_card_partner": ["ABC Warehouse","Abt Electronics","Amazon","American Eagle Outfitters","Dick's Sporting Goods","Discount Tire","Crutchfield","Daltile","Midas","Men's Wearhouse","Mohawk","Musician's Friend"],
+			# "content_topic": ["Home Buying","Taxes","Retirement","Banking","Credit Cards","Investing","SmartReads"],
+			# "content_category": ["Home Buying","Taxes","Retirement","Banking","Credit Cards","Investing","SmartReads"],
+			# "content_subtopic": ["Bank Reviews","Robo-Advisor Reviews","Financial Advisors","Card Reviews","Compare Cards","Calculators","Helpful Guides"],
+			# "partner":["Acorns","Ally","Betterment","Wealthfront","Chase"],
 			"service_level": ["Self-Serve", "Managed", "Top Tier"],
 			"symbol": ["BEL", "BVN", "AU", "YORW","GOL","NRG","GRVY","SPA","SCG","EIDX","AVGO","AMSC","CWT","NTEC","TRCO","CJJD","NTRI","MITK","LION"],
 			"contact_channel": ["Salesforce", "Qualtrics", "Yext", "Twilio", "Adobe"],
 			"contact_type": ["push","email","survey","in-app message","SMS"],
-			"content_topic": ["Institutional Investments", "Oil & Gas", "Mortage & Real Estate", "Global Emerging Markets", "Domestic Markets", "Personal Finance", "General Investnig"]
+			"partner_type": ["Bank","Card","Financial Advisor", "Tax Software"],
+			"user_type": ["Trader","Analyst","Wealth Manager","Investment Banker"],
+			"user_role": ["Trader","Analyst","Wealth Manager","Investment Banker"],
+			"access_method": ["Web","Mobile App","Messenger","Desktop"],
+			"content_topic": ["Institutional Investments", "Oil & Gas", "Mortage & Real Estate", "Global Emerging Markets", "Domestic Markets", "Personal Finance", "General Investing"]
 		},
 		"ints": {
 			"credit_score": 800,
@@ -353,10 +493,68 @@ eventData = {
 			"percentage_cash": 40,
 			"percentage_debt": 10,
 			"percentage_investments": 50,
+			"days_in_advance": (0,20),
 			"amount": 1000,
 			"%_change": 40,
 			"age": 65,
 			"dependents": 4
+		},
+		"traits":{
+			"budget_goal": ["Trip", "Retirement", "House", "Large Purchase", "Emergency Fund", "Loans"],
+			# "current_subscriptions": ["NYTimes", "Pandora", "Netflix", "Hulu", "HBONow", "The New Yorker", "NYMag", "Forbes"],
+			"savings_status": ["On-Track", "Off-Track"]
+		}
+	},	
+	"morganstanley": {
+		"write_key": "bI1iwwb4wKLylTo6IC3eG09vGezcGwAP",
+		"eventsWithProps": ["Client Login", "Content Viewed","FA Locator Search","Email Sent","Email Opened","Email Clickthrough","FA Detail Viewed","AEM Experience Viewed", "FA Meeting Logged", "FA Call Logged", "Support Request Started", "FA Contact Request Submitted","MSO Login","MSO Feature Usage","MSO: View Fund","MSO: View Financial Summary", "MSO: View Beneficiaries","MSO: View Retirement Center"],
+		"eventsNoProps": [],
+
+		"strings": {
+			"content_theme": ["Achieving My Financial Goals","Find a Financial Advisor","Managing Everyday Finances","Building & Protecting Wealth","Planning for My Family","Loans & Home Financing","Business Financing & Planning", "Planning for Retirement","Socially Responsible Investing", "Wealth Management"],
+			"content_topic": ["Achieving My Financial Goals","Find a Financial Advisor","Managing Everyday Finances","Building & Protecting Wealth","Planning for My Family","Loans & Home Financing","Business Financing & Planning", "Planning for Retirement","Socially Responsible Investing"],
+			"service": ["MSO","StockPlan Connect","Research Portal","Matrix"],
+			"consent_companylevel": [True,True,True,False],
+			"zip_code": ["94027","11962","90402","10007","10005","10012","94301","94105","10013","02199"],
+			"FA_group": ["The Akian / Zalanskas Wealth Management Group","The Sutton Place Group","Louis Jay Greif","Boris Voroba, CPM","Michael Berez","Daniel Kahn","The Guimarin Shephard Group"],
+			"FA_area_of_focus": ["Internationally Based Investor / Family", "Ultra High Net Worth Investing","Estate Planning", "General Investment Advice", "Wealth Transfer Planning / Inheritance","Retirement Planning"],
+			"AEM_experience": ["Low Intent","High Intent","Neutral","High Value"],
+			"MSO_feature": ["Retirement Planner","Fund Overview","Rebalancing","Tax Center","Live Chat","Fund Research","Family Planning"],
+			# "current_product": ["Credit Services","CareCredit","Loyalty","Synchrony Connect","MySynchrony"],
+			# "current_offering": ["Retail Financing","Healthcare Financing","Online Savings","Business","Connect"],
+			"account_type":["Consumer","Business"],
+			# "payment_type":["Current Balance","Current Due","Custom"],
+			# "credit_card_partner": ["ABC Warehouse","Abt Electronics","Amazon","American Eagle Outfitters","Dick's Sporting Goods","Discount Tire","Crutchfield","Daltile","Midas","Men's Wearhouse","Mohawk","Musician's Friend"],
+			# "content_topic": ["Home Buying","Taxes","Retirement","Banking","Credit Cards","Investing","SmartReads"],
+			# "content_category": ["Home Buying","Taxes","Retirement","Banking","Credit Cards","Investing","SmartReads"],
+			# "content_subtopic": ["Bank Reviews","Robo-Advisor Reviews","Financial Advisors","Card Reviews","Compare Cards","Calculators","Helpful Guides"],
+			# "partner":["Acorns","Ally","Betterment","Wealthfront","Chase"],
+			"service_level": ["Self-Serve", "Managed", "Top Tier"],
+			"symbol": ["BEL", "BVN", "AU", "YORW","GOL","NRG","GRVY","SPA","SCG","EIDX","AVGO","AMSC","CWT","NTEC","TRCO","CJJD","NTRI","MITK","LION"],
+			"email_campaign": ["Jan 2020 Rebalancing"],
+			"AEM_fragment": ["Advisor Availability Modal"],
+			"contact_channel": ["Salesforce", "Adobe"],
+			"contact_type": ["push","email","survey","in-app message","SMS"],
+			# "partner_type": ["Bank","Card","Financial Advisor", "Tax Software"],
+			"user_type": ["Trader","Analyst","Wealth Manager","Investment Banker"],
+			"user_role": ["Trader","Analyst","Wealth Manager","Investment Banker"],
+			"access_method": ["Web","Mobile App","Messenger","Desktop"],
+			"content_topic": ["Institutional Investments", "Oil & Gas", "Mortage & Real Estate", "Global Emerging Markets", "Domestic Markets", "Personal Finance", "General Investing"]
+		},
+		"ints": {
+			"credit_score": (600,800),
+			"monthly_expenses": 50000,
+			"percentage_cash": 40,
+			"percentage_debt": 10,
+			"percentage_investments": 50,
+			# "days_in_advance": (0,20),
+			"amount": 1000,
+			"%_change": 40,
+			"age": 65,
+			"dependents": 4,
+			"net_promoter_score": (4,10),
+			"company_code": (1111,9999),
+			"net_worth": (100000,1000000000)
 		},
 		"traits":{
 			"budget_goal": ["Trip", "Retirement", "House", "Large Purchase", "Emergency Fund", "Loans"],
@@ -402,22 +600,25 @@ eventData = {
 			"nps_score": 10
 		}
 	},
-	"draftkings": {
-		"write_key": "IOON1YsCfPGiXBeWC6JlFK45OJewxJJi",
-		"eventsWithProps": ["App Launch", "Place Bet", "Start Roster", "Confirm Roster", "QuickBet", "League Page", "Event Detail", "Content Viewed", "Signup Started", "Signup Completed", "View Team", "Play"],
+	"sportsbook": {
+		# "write_key": "2CVPtIgdk8GoNUrgrqERnK6fYHJ7TzGQ", #diggory01
+		"write_key": "qADmHfonEFoTVCPfvPNRJ0tugGTJPWKv", #penn-interactive
+		"eventsWithProps": ["App Launch", "Place Bet", "Start Roster", "Confirm Roster", "QuickBet", "League Page", "Event Detail", "Content Viewed", "Signup Started", "Signup Completed", "Account Created", "View Team", "Play"],
 		"eventsNoProps": [],
 
 		"strings": {
-			"current_app": ["Sportsbook", "Daily Fantasy Sports", "DK Live"],
-			"app_id": ["sbios", "sbandroid", "dkios", "dkandroid", "dkweb", "sbweb", "dkliveandroid", "dkliveios", "dkliveweb"],
 			"league": ["NFL","NBA","MLB","GOLF","NHL","NAS","MMA","SOC","CFL","CFB","LOL","EL","TEN"],
+			"current_platform": ["Desktop","Mobile"],
 			"team": ["Patriots", "Rams", "Giants", "Packers", "Jets", "Eagles", "Falcons", "Vikings", "Steelers", "Panthers", "49ers", "Jaguars", "Texans", "Raiders", "Cowboys"],
 			"stake_level": ["low", "medium", "high", "high+"],
-			"state/region": ["Non-US", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
-
+			"state/region": ["Non-US", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"],
+			"bet_type": ["Futures","Money Line"]
 		},
 		"ints": {
-			"bet_amount": 1000
+			"bet_amount": (5,1500),
+			"odds": (-5000,5000),
+			"mychoice_id": (11111,99999),
+			"loyalty_id": (11111,99999)
 		}
 	},
 	"thomsonreuters": {
@@ -463,7 +664,7 @@ eventData = {
 	},
 	"healthcare": {
 		"write_key": "1cllWiQDgAcDQX8QCVzOoN93aXWaHXV9",
-		"eventsWithProps": ["Set Reminder", "Feature Usage", "View Calendar", "Support Request Started", "Search Started", "Search Result Clicked", "App Launched", "App Installed", "First App Launch", "Appointment Booked", "Appointment Rescheduled", "Appointment Cancelled", "Reviews Viewed", "Practitioner Viewed", "Review Submitted", "Review Started", "App Link Texted"],
+		"eventsWithProps": ["Set Reminder", "Feature Usage", "View Calendar", "Support Request Started", "Search Started", "Search Result Clicked", "App Launched", "App Installed", "First App Launch", "Appointment Booked", "Appointment Rescheduled", "Appointment Cancelled", "Reviews Viewed", "Practitioner Viewed", "Review Submitted", "Review Started", "App Link Texted","Office Visit Completed"],
 		"eventsNoProps": [],
 
 		"strings": {
@@ -471,7 +672,7 @@ eventData = {
 			"specialization": ["Acupuncturists","Allergists","Audiologists","Cardiologists","Chiropractors","Dentists","Dermatologists","Dietitians","Ear, Nose & Throat Doctors","Emergency Medicine Physicians","Endocrinologists","Endodontists","Eye Doctors","Family Physicians","Gastroenterologists","Hand Surgeons","Hearing Specialists","Hematologists","Infectious Disease Specialists","Infertility Specialists","Internists","Naturopathic Doctors","Nephrologists","Neurologists","Neurosurgeons","Nurse Practitioners","Nutritionists","OB-GYNs","Oncologists","Ophthalmologists","Optometrists","Oral Surgeons","Orthodontists","Orthopedic Surgeons","Pain Management Specialists","Pediatric Dentists","Pediatric Urgent Care Specialists","Pediatricians","Periodontists","Physiatrists","Physical Therapists","Plastic Surgeons","Podiatrists","Doctors","Prosthodontists","Psychiatrists","Psychologists","Psychotherapists","Pulmonologists","Radiologists","Rheumatologists","Sleep Medicine Specialists","Sports Medicine Specialists","Surgeons","Therapists / Counselors","Travel Medicine Specialists","Urgent Care Specialists","Urologists"],
 			"changed_by": ["Patient", "Practitioner"],
 			"current_feature": ["Calendar", "Tracker", "Reminders", "Health Guides", "Live Help"],
-			"insurance_provider": ["Aetna", "Blue Cross Blue Shield", "Cigna", "EmblemHealth", "UnitedHealthcare", "None", "Banner Health", "Avera Health", "Assurant Health", "Medicare", "Medicaid", "MetroHealth", "MetLife"]
+			# "insurance_provider": ["Aetna", "Blue Cross Blue Shield", "Cigna", "EmblemHealth", "UnitedHealthcare", "None", "Banner Health", "Avera Health", "Assurant Health", "Medicare", "Medicaid", "MetroHealth", "MetLife"]
 
 		},
 		"ints": {
@@ -489,26 +690,34 @@ eventData = {
 		}
 	},
 	"healthfirst": {
-		"write_key": "1cllWiQDgAcDQX8QCVzOoN93aXWaHXV9",
-		"eventsWithProps": ["Set Reminder", "Feature Usage", "View Calendar", "Support Request Started", "Search Started", "Search Result Clicked", "App Launched", "App Installed", "First App Launch", "Appointment Booked", "Appointment Rescheduled", "Appointment Cancelled", "Reviews Viewed", "Provider Viewed", "Review Submitted", "Review Started", "App Link Texted", "Plan Viewed", "Plan Selected", "Claim Form Started", "Claim Form Submitted", "Claim Response Viewed", "Plan-Finder Started", "Plan Renewed", "Message Viewed", "Message Sent", "App Crash", "Login", "Home Service", "Eligibility Viewed", "Bill Viewed", "Bill Paid", "Caremark Accessed", "OTC Benefits Viewed", "Account Creation Started", "Anonymous Visit", "Account Creation Completed"],
+		# "write_key": "1cllWiQDgAcDQX8QCVzOoN93aXWaHXV9",
+		"write_key": "anN31j0fpm2g8IQK6dACT3TxGzCWs6ME", #poc workspace
+		"eventsWithProps": ["Set Reminder", "Feature Usage", "View Calendar", "Support Request Started", "Search Started", "Search Result Clicked", "App Launched", "App Installed", "First App Launch", "Appointment Booked", "Appointment Rescheduled", "Appointment Cancelled", "Reviews Viewed", "Provider Viewed", "Review Submitted", "Review Started", "App Link Texted", "Plan Viewed", "Plan Selected", "Claim Form Started", "Claim Form Submitted", "Claim Response Viewed", "Plan-Finder Started", "Plan Renewed", "Message Viewed", "Message Sent", "App Crash", "Login", "Home Service", "Eligibility Viewed", "Bill Viewed", "Bill Paid", "Caremark Accessed", "OTC Benefits Viewed", "Account Creation Started", "Anonymous Visit", "Account Creation Completed", "Support Call Completed", "Help Page Viewed","Help Page Viewed","Help Page Viewed","Help Page Viewed","Help Page Viewed", "Replacement Card Requested", "Mobile ID Card Viewed"],
 		"eventsNoProps": [],
 
 		"strings": {
 			"platform": ["ios", "android", "web", "IVR/phone"],
+			"channel": ["mobile", "web", "IVR/phone"],
+			"preferred_channel": ["mobile", "web", "IVR/phone"],
+			"preferred_language":["English","Spanish","Chinese"],
 			"messaging_channel": ["Email", "Message Center", "Push Notification", "Phone Call/IVR", "Livechat"],
 			"user_type": ["Employer", "Member", "Provider", "Broker", "Member", "Member", "Member", "Member", "Member", "Member"],
+			"help_topic": ["General Questions","Eligibility","Enrollment","Coverage","Renewal","Surprise Bills"],
+			"help_question": ["Can I save money on my healthcare costs?","How much will health insurance cost?","What is NY State of Health (NYSOH)?","Do generic drugs work as well as brand name drugs?","How can I pay my premium?","Can I get help if I don't speak English?","How do I know if I can get health insurance through the NY State of Health?","Who is eligible to enroll in a Healthfirst insurance plan?"],
 			"provider_type": ["Acupuncturists","Allergists","Audiologists","Cardiologists","Chiropractors","Dentists","Dermatologists","Dietitians","Ear, Nose & Throat Doctors","Emergency Medicine Physicians","Endocrinologists","Endodontists","Eye Doctors","Family Physicians","Gastroenterologists","Hand Surgeons","Hearing Specialists","Hematologists","Infectious Disease Specialists","Infertility Specialists","Internists","Naturopathic Doctors","Nephrologists","Neurologists","Neurosurgeons","Nurse Practitioners","Nutritionists","OB-GYNs","Oncologists","Ophthalmologists","Optometrists","Oral Surgeons","Orthodontists","Orthopedic Surgeons","Pain Management Specialists","Pediatric Dentists","Pediatric Urgent Care Specialists","Pediatricians","Periodontists","Physiatrists","Physical Therapists","Plastic Surgeons","Podiatrists","Doctors","Prosthodontists","Psychiatrists","Psychologists","Psychotherapists","Pulmonologists","Radiologists","Rheumatologists","Sleep Medicine Specialists","Sports Medicine Specialists","Surgeons","Therapists / Counselors","Travel Medicine Specialists","Urgent Care Specialists","Urologists"],
-			"changed_by": ["Patient", "Practitioner"],
 			"support_type": ["Claim Support", "Tech Support", "Find a Practice"],
+			"support_topic": ["Claim Support", "Tech Support", "Find a Practice", "Change Address", "Change Data", "Appeal", "Information Request"],
 			"current_feature": ["Calendar", "Tracker", "Reminders", "Health Guides", "Live Help"],
-			"renewal_date": ["2019-04-01", "2019-05-01", "2019-06-01"],
+			"renewal_date": ["2019-10-01", "2019-11-01", "2019-12-01"],
 			"plan_category": ["Healthfirst Leaf", "Medicaid Managed Care", "Healthfirst Essential", "Medicare", "Managed Long Term Care", "Healthfirst AbsoluteCare FIDA", "Child Health Plus", "Personasl Wellness", "Healthfirst Pro & Pro Plus EPO"],
 			"most_recent_activity": ["Set Reminder", "Feature Usage", "View Calendar", "Support Request Started", "Search Started", "Search Result Clicked", "App Launched", "App Installed", "First App Launch", "Appointment Booked", "Appointment Rescheduled", "Appointment Cancelled", "Reviews Viewed", "Provider Viewed", "Review Submitted", "Review Started", "App Link Texted", "Plan Viewed", "Plan Selected", "Claim Form Started", "Claim Form Submitted", "Claim Response Viewed", "Plan-Finder Started", "Plan Renewed", "Message Viewed", "Message Sent", "App Crash", "Login", "Home Service", "Eligibility Viewed", "Bill Viewed", "Bill Paid", "Caremark Accessed", "OTC Benefits Viewed", "Account Creation Started", "Anonymous Visit", "Account Creation Completed"],
+			"refill_date": ["12-01-2019","1-01-2020","2-01-2020","3-01-2020"]
 			# "insurance_provider": ["Aetna", "Blue Cross Blue Shield", "Cigna", "EmblemHealth", "UnitedHealthcare", "None", "Banner Health", "Avera Health", "Assurant Health", "Medicare", "Medicaid", "MetroHealth", "MetLife"]
 
 		},
 		"ints": {
 			"search_results": 100,
+			"call_duration": 60,
 			"age": (18,65),
 			"lifetime_appointments": 50,
 			"lifetime_cancellations": 10,
@@ -517,10 +726,11 @@ eventData = {
 			"total_reviews": 500,
 			"distance_miles": 10,
 			"deductible": (0,5000),
+			"member_id": (11111,99999),
 			"monthly_cost": (0,5000)
 		}
 	},
-	"guardian": {
+	"insurance": {
 		"write_key": "1cllWiQDgAcDQX8QCVzOoN93aXWaHXV9",
 		"eventsWithProps": ["Advisor Viewed", "Advisor Meeting Scheduled", "Advisor Meeting Completed", "Advisor Message Opened", "Set Reminder", "Feature Usage", "View Calendar", "Support Request Started", "Search Started", "Search Result Clicked", "App Launched", "App Installed", "First App Launch", "Appointment Booked", "Appointment Rescheduled", "Appointment Cancelled", "Reviews Viewed", "Provider Viewed", "Review Submitted", "Review Started", "App Link Texted", "Plan Viewed", "Plan Selected", "Claim Form Started", "Claim Form Submitted", "Claim Response Viewed", "Plan-Finder Started", "Plan Renewed", "Message Viewed", "Message Sent", "App Crash", "Login", "Home Service", "Eligibility Viewed", "Bill Viewed", "Bill Paid", "OTC Benefits Viewed", "Account Creation Started", "Anonymous Visit", "Account Creation Completed", "401k Contribution Changed", "401k Balance Viewed", "401k Withdrawal Started","Provider Saved", "Provider Viewed", "Page Viewed"],
 		"eventsNoProps": [],
@@ -536,11 +746,11 @@ eventData = {
 			"renewal_date": ["2019-06-01", "2019-07-01", "2019-08-01"],
 			"plan_type": ["PPO", "DHMO"],
 			"plan_manager": ["Individual", "Employer-Sponsored"],
-			"plan_name": ["Managed DentalGuard", "Managed DentalGuard Child Essentials", "Guardian Family Essentials", "Guardian Pediatric Essentials"],
+			# "plan_name": ["Managed DentalGuard", "Managed DentalGuard Child Essentials", "Guardian Family Essentials", "Guardian Pediatric Essentials"],
 			"active_products": ["Disability Income Insurance", "Annuities", "Investments", "Individual Dental", "Health Exchange Dental", "401k"],
 			"current_product": ["Disability Income Insurance", "Annuities", "Investments", "Individual Dental", "Health Exchange Dental", "401k"],
 			"most_recent_activity": ["Set Reminder", "Feature Usage", "View Calendar", "Support Request Started", "Search Started", "Search Result Clicked", "App Launched", "App Installed", "First App Launch", "Appointment Booked", "Appointment Rescheduled", "Appointment Cancelled", "Reviews Viewed", "Provider Viewed", "Review Submitted", "Review Started", "App Link Texted", "Plan Viewed", "Plan Selected", "Claim Form Started", "Claim Form Submitted", "Claim Response Viewed", "Plan-Finder Started", "Plan Renewed", "Message Viewed", "Message Sent", "App Crash", "Login", "Home Service", "Eligibility Viewed", "Bill Viewed", "Bill Paid", "OTC Benefits Viewed", "Account Creation Started", "Anonymous Visit", "Account Creation Completed"],
-			"current_domain": ["GuardianOnline","NetxInvestor","GuardianAnytime"],
+			# "current_domain": ["GuardianOnline","NetxInvestor","GuardianAnytime"],
 			# "insurance_provider": ["Aetna", "Blue Cross Blue Shield", "Cigna", "EmblemHealth", "UnitedHealthcare", "None", "Banner Health", "Avera Health", "Assurant Health", "Medicare", "Medicaid", "MetroHealth", "MetLife"]
 
 		},
@@ -563,8 +773,8 @@ eventData = {
 		}
 	},
 	"ibm_cloud": {
-		"write_key": "Xw07eALQqvBVjHaJemyZIyeePXwQHtqW",
-		"eventsWithProps": ["Start Trial", "Marketing Page Viewed", "Trial Page Viewed", "Trial Requested", "Invite User", "View Dashboard", "Launch App", "Trial Expired", "Plans Viewed", "Plan Selected", "Billing Run", "Cancellation Initiated", "Cancellation Completed", "Support Request", "Request Quote", "Request Demo"],
+		"write_key": "mUFv8S1qOc7q8cbfpdbMZvnKonZPCEfd",
+		"eventsWithProps": ["Start Trial", "Marketing Page Viewed", "Trial Page Viewed", "Trial Requested", "Invite User", "View Dashboard", "Launch App", "Trial Expired", "Plans Viewed", "Plan Selected", "Billing Run", "Cancellation Initiated", "Cancellation Completed", "Support Request", "Request Quote", "Request Demo", "Feature Used"],
 		"eventsNoProps": [],
 
 		"strings": {
@@ -607,7 +817,7 @@ eventData = {
 	},
 	"hospitality": {
 		"write_key": "bUPdxB7pZr7nnSDiDIcfaNynxUXmZN7b",
-		"eventsWithProps": ["Reservation Started", "Reservation Confirmed", "Reservation Canceled", "Landing Page Loaded", "Rewards Login", "Rewards Signup Started", "Rewards Signup Completed", "Rewards Dashboard Viewed", "Points Redeemed", "Hotel Viewed", "Search Initiated", "Search Results Viewed", "Search Result Clicked", "Checkout Started", "Checkout Completed", "Check-In Started", "Check-In Completed", "Review Started", "Review Submitted", "Payment Complete", "App Launched", "Call Logged"],
+		"eventsWithProps": ["Reservation Started", "Reservation Confirmed", "Reservation Canceled", "Landing Page Loaded", "Rewards Login", "Rewards Signup Started", "Rewards Signup Completed", "Rewards Dashboard Viewed", "Points Redeemed", "Hotel Viewed", "Search Initiated", "Search Results Viewed", "Search Result Clicked", "Checkout Started", "Checkout Completed", "Check-In Started", "Check-In Completed", "Review Started", "Review Submitted", "Payment Complete", "App Launched", "Call Logged","Holiday Package Viewed","Holiday Package Selected","Holiday Package Confirmed"],
 		"eventsNoProps": [],
 
 		"strings": {
@@ -621,15 +831,72 @@ eventData = {
 			# "current_brand": ["The Ritz-Carlton", "St. Regis", "JW Marriott", "The Luxury Collection", "W Hotels", "Edition", "Marriott", "Sheraton", "Marriott Vacation Club", "Delta Hotels", "Le Meridien", "Westin", "Autograph Collection", "Design Hotels", "Renaissance Hotels", "Tribute Portfolio", "Courtyard by Marriott", "Four Points", "Springhill Suites", "Protea Hotels", "Fairfield by Marriott", "AC Hotels", "Aloft", "Moxy", "Marriott Executive Apartments", "Residence Inn", "Towneplace Suites", "Element"],
 			"room_type": ["Standard King", "City View King", "Oceanfront King", "Standard Double", "City View Double", "Oceanfront Double", "Oceanfront Suite", "Bungalow Loft Suite", "Penthouse"],
 			"package": ["Hotel Only", "Hotel+Flight", "Hotel+Experience", "Hotel+Flight+Experience"],
-			"location": ["Dove Mountain","Paradise Valley ","Half Moon Bay","Laguna Niguel","Lake Tahoe","Los Angeles","Marina del Rey","Rancho Mirage","San Francisco","Santa Barbara","Bachelor Gulch","Denver","Vail","Amelia Island","Bal Harbour, Miami","Coconut Grove, Miami","Fort Lauderdale","Key Biscayne, Miami","Naples","Naples Golf","Orlando","Sarasota","South Beach","Atlanta","Reynolds, Lake Oconee","Kapalua","Waikiki Beach ","Chicago","New Orleans","Boston","St. Louis","New York, Central Park","New York, Westchester","Charlotte","Cleveland","Ontario","Toronto","Pennsylvania","Philadelphia","Dallas","Georgetown, Washington, D.C.","Pentagon City","Tysons Corner","Washington, D.C.", "Vienna","Berlin","Barcelona","Tenerife","Geneva","Istanbul","Moscow","Aruba","San Juan","Montreal"]
-		},
+			"location": ["Dove Mountain","Paradise Valley ","Half Moon Bay","Laguna Niguel","Lake Tahoe","Los Angeles","Marina del Rey","Rancho Mirage","San Francisco","Santa Barbara","Bachelor Gulch","Denver","Vail","Amelia Island","Bal Harbour, Miami","Coconut Grove, Miami","Fort Lauderdale","Key Biscayne, Miami","Naples","Naples Golf","Orlando","Sarasota","South Beach","Atlanta","Reynolds, Lake Oconee","Kapalua","Waikiki Beach ","Chicago","New Orleans","Boston","St. Louis","New York, Central Park","New York, Westchester","Charlotte","Cleveland","Ontario","Toronto","Pennsylvania","Philadelphia","Dallas","Georgetown, Washington, D.C.","Pentagon City","Tysons Corner","Washington, D.C.", "Vienna","Berlin","Barcelona","Tenerife","Geneva","Istanbul","Moscow","Aruba","San Juan","Montreal"],
+			"current_brand": ["AmericInn","Baymont","Caesars","Days Inn","Dazzler","Dolce","Esplendor","Hawthorn Suites","Howard Johnson","Wingate","Wyndham Garden","Wyndham Vacation Resorts","Wyndham Grand","TRYP","Ramada"],
+			"vacation_type": ["Beach Vacations","Snow & Ski","Theme Park","Fishing","Golf Vacations","Tennis Vacations","Summer in the Mountains","Groups & Meetings","Destination Weddings"],
+			"call_topic": ["Tech Support", "Reservation Modification", "Cancellation", "Inquiry", "New Reservation"]
+			},
 		"ints": {
 			"price": (200,5000),
 			"days_in_advance": (0,30),
 			"review_score": (2,5),
 			"resort_credit": (0,100),
 			"lifetime_value": (0,5000),
-			"points": (0,10000)
+			"stay_duration": (1,15),
+			"number_guests": (1,7),
+			"points": (0,10000),
+			"call_duration": (3,60),
+			"trip_value": (200,5000),
+			"pending_trips": (0,2),
+			"membership_id": (1111,9999)
+		}
+	},
+	"wyndham": {
+		"write_key": "bUPdxB7pZr7nnSDiDIcfaNynxUXmZN7b",
+		"eventsWithProps": ["Reservation Started", "Reservation Confirmed", "Reservation Canceled", "Landing Page Loaded", "Rewards Login", "Rewards Signup Started", "Rewards Signup Completed", "Rewards Dashboard Viewed", "Points Redeemed", "Property Viewed", "Property Saved", "Search Initiated", "Search Results Viewed", "Search Result Clicked", "Checkout Started", "Checkout Completed", "Check-In Started", "Check-In Completed", "Review Started", "Review Submitted", "Payment Complete", "App Launched", "Call Logged","Holiday Package Viewed","Holiday Package Selected","Holiday Package Confirmed", "Credit Expiration", "Borrow Credit"],
+		"eventsNoProps": [],
+
+		"strings": {
+			# "current_platform":["iOS","Android","Web","Check-In Kiosk"],
+			# "booking_source": ["First-Party", "hotels.com", "kayak.com", "expedia.com"],
+			"category_l1": ["Luxury", "Premium", "Select"],
+			"all_inclusive": [True,False],
+			"flexible_dates": [True, False],
+			"wyndham_rewards_member?": [True,False],
+			"current_channel": ["Call Center", "Web"],
+			"category": ["Luxury","Classic Premium","Premium"],
+			# "current_brand": ["The Ritz-Carlton", "St. Regis", "JW Marriott", "The Luxury Collection", "W Hotels", "Edition", "Marriott", "Sheraton", "Marriott Vacation Club", "Delta Hotels", "Le Meridien", "Westin", "Autograph Collection", "Design Hotels", "Renaissance Hotels", "Tribute Portfolio", "Courtyard by Marriott", "Four Points", "Springhill Suites", "Protea Hotels", "Fairfield by Marriott", "AC Hotels", "Aloft", "Moxy", "Marriott Executive Apartments", "Residence Inn", "Towneplace Suites", "Element"],
+			# "room_type": ["Standard King", "City View King", "Oceanfront King", "Standard Double", "City View Double", "Oceanfront Double", "Oceanfront Suite", "Bungalow Loft Suite", "Penthouse"],
+			"home_type": ["Beach House", "Townhouse", "City Apartment", "Lake House", "Ski House", "Vacation Club"],
+			"package": ["Hotel Only", "Hotel+Flight", "Hotel+Experience", "Hotel+Flight+Experience"],
+			"location": ["Dove Mountain","Paradise Valley ","Half Moon Bay","Laguna Niguel","Lake Tahoe","Los Angeles","Marina del Rey","Rancho Mirage","San Francisco","Santa Barbara","Bachelor Gulch","Denver","Vail","Amelia Island","Bal Harbour, Miami","Coconut Grove, Miami","Fort Lauderdale","Key Biscayne, Miami","Naples","Naples Golf","Orlando","Sarasota","South Beach","Atlanta","Reynolds, Lake Oconee","Kapalua","Waikiki Beach ","Chicago","New Orleans","Boston","St. Louis","New York, Central Park","New York, Westchester","Charlotte","Cleveland","Ontario","Toronto","Pennsylvania","Philadelphia","Dallas","Georgetown, Washington, D.C.","Pentagon City","Tysons Corner","Washington, D.C.", "Vienna","Berlin","Barcelona","Tenerife","Geneva","Istanbul","Moscow","Aruba","San Juan","Montreal"],
+			"current_brand": ["Club Wyndham","WorldMark by Wyndham","Shell Vacations Club","Margaritaville Vacation Club"],
+			"RCI_Elite_Rewards_member": [True,False],
+			"global_engaged_indicator": [True,False],
+			"vacation_type": ["Beach Vacations","Snow & Ski","Theme Park","Fishing","Golf Vacations","Tennis Vacations","Summer in the Mountains","Groups & Meetings","Destination Weddings"],
+			"call_topic": ["Tech Support", "Reservation Modification", "Cancellation", "Inquiry", "New Reservation"],
+			"current_credit_type": ["Clubs","Clubs","Clubs","Clubs","Points","Weeks"],
+			"current_channel": ["Email", "SMS", "DM"]
+			},
+		"ints": {
+			"exchange_fee": (200,5000),
+			"trading_power": (14,17),
+			"club_id": (1111,9999),
+			"days_in_advance": (0,30),
+			"review_score": (2,5),
+			"lifetime_value": (0,5000),
+			"stay_duration": (1,15),
+			"number_guests": (1,7),
+			"points": (0,10000),
+			"week_number": (1,52),
+			"current_points_available": (0,10000),
+			"current_weeks_available": (1,5),
+			"current_points_borrowed": (0,500),
+			"current_weeks_borrowed": (0,5),
+			"NPS_net_promoter_score": (5,10),
+			"call_duration": (3,60),
+			"pending_stays": (0,1),
+			"membership_id": (1111,9999)
 		}
 	},
 	"tripadvisor": {
@@ -697,13 +964,7 @@ eventData = {
 			"content_title": ["Where to find Natrel Ice Cream Mochis?","Mochi: A treat at your fingertips!","Natrel invites you to its Bistro","Best New Product Award : Natrel Whipped Dip & Spread","A new lactose free ice cream flavour, with a Canadian touch!","Natrel chocolate milk now organic","Taste the possibilities with Natrel"],
 			"product_category": ["Milks","Creams","Flavoured Milks","Cheeses","Yoghurts","Lactose-Free","Ice Creams","Sour Creams","Cottage Cheeses","Cream Cheeses"],
 			"product_name":["Eggnog","Chocolate Milk","Buttermilk","1% Partly Skimmed Milk","Homogenized Milk","2% Partly Skimmed Milk","Skim Milk","Island Farms by Natrel 33% Whipping Cream", "Island Farms by Natrel 18% Table Cream", "Island Farms by Natrel 10% Half & Half Cream","1% Cottage Cheese"],
-			"campaign_variant": ["Updated Images", "Larger CTA", "Control Group"],
-			"consent_status": ["opt-out-marketing", "opt-out-emails", "opt-out-push", "opt-out-all", "subscribed"],
-			"consent_email": [True, False],
-			"consent_push": [True, False],
-			"consent_mktg": [True, False],
-			"consent_transactional": [True, False],
-			"consent_productupdates": [True, False]
+			"campaign_variant": ["Updated Images", "Larger CTA", "Control Group"]
 		},
 		"ints": {
 			"campaign_id": (111,999),
@@ -737,13 +998,7 @@ eventData = {
 			"product_tags": ["Health Food", "Zero-Calorie", "On-The-Go", "Home Prep", "Active", "Caffeinated", "Premium", "Limited Edition", "Parties"],
 			"distributor_clicked": ["Amazon", "Local Store"],
 			"campaign_variant": ["Updated Images", "Larger CTA", "Control Group"],
-			"online_purchase_enabled": [True, False],
-			"consent_status": ["opt-out-marketing", "opt-out-emails", "opt-out-push", "opt-out-all", "subscribed"],
-			"consent_email": [True, False],
-			"consent_push": [True, False],
-			"consent_mktg": [True, False],
-			"consent_transactional": [True, False],
-			"consent_productupdates": [True, False]
+			"online_purchase_enabled": [True, False]
 		},
 		"ints": {
 			"campaign_id": (111,999),
@@ -754,24 +1009,24 @@ eventData = {
 			"region_id": (1111,9999)
 		}
 	},
-	"giant_eagle": {
+	"grocery": {
 		"write_key": "UZkyREjOpT7a5LqJIbjVbNsLRSXRD88K",
-		"eventsWithProps": ["Digital Checkout", "POS Checkout", "1-Hour Delivery Started", "Feedback Submitted", "In-Store Visit", "Page Viewed", "Products Searched", "Product List Viewed", "Product List Filtered", "Promotion Viewed", "Promotion Clicked", "Product Clicked", "Product Viewed", "Product Added", "Product Removed", "Cart Viewed", "Checkout Started", "Checkout Step Viewed", "Checkout Step Completed", "Payment Info Entered", "Order Completed", "Order Updated", "Order Refunded", "Order Cancelled", "View eCoupon", "Clip eCoupon", "Screen Viewed", "Feature Used", "Circular Delivered"],
+		"eventsWithProps": ["Digital Checkout", "POS Checkout", "1-Hour Delivery Started", "Feedback Submitted", "In-Store Visit", "Page Viewed", "Products Searched", "Product List Viewed", "Product List Filtered", "Promotion Viewed", "Promotion Clicked", "Product Clicked", "Product Viewed", "Product Added", "Product Removed", "Cart Viewed", "Checkout Started", "Checkout Step Viewed", "Checkout Step Completed", "Payment Info Entered", "Order Completed", "Order Updated", "Order Refunded", "Order Cancelled", "View eCoupon", "Clip eCoupon", "Screen Viewed", "Feature Used", "Circular Delivered","Order Ahead","Store Locator", "Email Clickthrough","Search"],
 		"eventsNoProps": [],
 
 		"strings": {
 			"current_platform": ["Web", "In-Store", "Mobile"],
 			"category": ["On Sale", "Grocery", "Produce", "Meat & Seafood", "Deli & Cheese", "Bakery & Bread", "Prepared Foods", "Dairy & Eggs", "Frozen", "Beverages", "Household Essentials", "Health & Beauty", "Floral", "Pharmacy"],
-			"current_feature": ["eCoupon", "Free Pickup", "Delivery", "Order Online", "Weekly Ad", "Shopping History", "eAdvantage Offer of the Week", "Catering", "Cake Ordering"],
-			"current_brand": ["Giant Eagle", "Giant Eagle", "Giant Eagle", "Giant Eagle", "Giant Eagle", "Giant Eagle", "Market District", "GetGo Cafe + Market"],
-			"advantageClub_member": [True, False],
-			"fuelperks_member": [True,False],
+			"current_feature": ["eCoupon", "Free Pickup", "Delivery", "Order Online", "Order Ahead", "Weekly Ad", "Shopping History", "Offer of the Week", "Catering", "Cake Ordering","Store Locator"],
+			# "current_brand": ["Giant Eagle", "Giant Eagle", "Giant Eagle", "Giant Eagle", "Giant Eagle", "Giant Eagle", "Market District", "GetGo Cafe + Market"],
+			"rewards_member": [True, False],
+			# "fuelperks_member": [True,False],
 			"circular_pause_experiment": [True,False],
 		},
 		"ints": {
-			"price": 300,
+			"price": 50,
 			"quantity": 25,
-			"fuelperks_points": 10000,
+			"rewards_points": 10000,
 			"store_id": (1111,9999),
 			"region_id": (1111,9999)
 		}
@@ -796,12 +1051,6 @@ eventData = {
 			"item_subcategory": ["Basketball", "Boots", "Cleats & Spikes", "Custom", "Golf", "Hiking & Trail", "Running", "Slides & Sandals", "Sportstyle", "Training", "Graphic Ts", "Hoodies & Sweatshirts", "Jackets & Vests", "Long Sleeves", "Polo Shirts", "Short Sleeves", "Backpacks & Bags"],
 			"connected_device": ["Apple Watch", "Garmin", "Fitbit", "Jawbone"],
 			"[Amplitude] Cohorts": ["Churn Risks", "Slow Onboarding Funnel", "Upsell Cluster A", "Upsell Cluster B", "New Users with Garmin", "Connected Newest Garmin Device", "UA HOVR Connected"],
-			"consent_status": ["opt-out-marketing", "opt-out-emails", "opt-out-push", "opt-out-all", "subscribed"],
-			"consent_email": [True, False],
-			"consent_push": [True, False],
-			"consent_mktg": [True, False],
-			"consent_transactional": [True, False],
-			"consent_productupdates": [True, False],
 			"mvp_payment_type": ["monthly","yearly","free"],
 			"audience": ["Churn Risks", "Premium Upsell Likely", "New Users with Garmin", "Connected Newest Garmin Device", "UA HOVR Connected"],
 			"current_app": ["Under Armour Mobile", "UA Play", "UnderArmour.com", "Map My Run", "Map My Walk", "Map My Ride", "Record by Under Armour", "Map My Fitness", "Map My Hike", "UA Shop"],
@@ -811,6 +1060,38 @@ eventData = {
 			"run_distance_mi": 20.0,
 			"run_duration": 60.0,
 			"price": 300,
+			"quantity": 25,
+			"store_id": (1111,9999),
+			"region_id": (1111,9999)
+		}
+	},	
+	"weightwatchers": {
+		"write_key": "ENhFWOE7F4QvLlNYlvVHdFqGgnueqjay", 
+		"eventsWithProps": ["Recipes Searched","Sync Fitness Device","My Day Dashboard Viewed","Discover Recipes","Recipe Saved","Recipe Viewed", "Barcode Scanned","Win Logged","Connect Feed Viewed","Coach Chat Started","Coach Chat COmpleted","App Launch", "Audience Entered", "Audience Exited", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used", "Feature Used","Activity Logged","Activity Logged","Activity Logged","Activity Logged","Activity Logged"],
+		"eventsNoProps": [],
+
+		"strings": {
+			"current_platform": ["Web", "Mobile Web", "Native App", "Apple Watch","Garmin"],
+			"race_type": ["Half Marathon","5K","Marathon","10K","4M","1M"],
+			"current_feature": ["My Day","Recipe Search","Recipe Library","Barcode Scanner","SmartPoints Checker","Connect","Coach Chat","Journey Viewed"],
+			"premium_feature?": [True,False],
+			"premium_status": ["Canceled", "Free", "Active"],
+			"activity_type": ["Hike", "Run", "Walk", "Strength Training", "Bike"],
+			"connected_device": ["Apple Watch", "Garmin", "Fitbit", "Jawbone"],
+			"audience": ["Churn Risks", "Premium Upsell Likely", "New Users with Garmin", "Connected Newest Garmin Device"],
+			"recipe_type": ["Quick & Easy","Family-Friendly","Low Smartpoints","Medium Smartpoints","Special Occasion"],
+			"recipe_cuisine": ["American","Chinese","Asian Fusion","Mexican"],
+			"dietary_preferences": ["Vegan","Vegetarian","Keto","Dairy-Free","Diabetes-Friendly","Gluten-Free"],
+			"win_type": ["Wellness Workshop","Activity Logged","Activity Streak","Meal Tracked", "Weight Logged", "Logging Streak"]
+		},
+		"ints": {
+			"run_distance": 20.0,
+			"win_rewards_claimed": 20,
+			"run_distance_mi": 20.0,
+			"run_duration": 60.0,
+			"price": 30,
+			"wins": 100,
+			"smartpoints": 10,
 			"quantity": 25,
 			"store_id": (1111,9999),
 			"region_id": (1111,9999)
@@ -837,7 +1118,6 @@ eventData = {
 			"member_status": ["Free Trial", "Member Guest", "Lead", "Lapsed"],
 			"workout_type": ["Spinning", "Yoga", "Run", "Strength"],
 			"connected_device": ["Apple Watch", "Garmin", "Fitbit", "Jawbone"],
-			"consent_status": ["opt-out-marketing", "opt-out-all", "subscribed"],
 			"current_region": ["Boston", "Canada", "Chicago", "Connecticut", "Florida", "London", "Michigan", "New Jersey", "New York", "Northern California", "Southern California", "Texas", "Washington DC"],
 			"home_region": ["Boston", "Canada", "Chicago", "Connecticut", "Florida", "London", "Michigan", "New Jersey", "New York", "Northern California", "Southern California", "Texas", "Washington DC"],
 			"current_club": ["Columbus Circle", "E Madison Avenue", "East 61st Street", "East 63rd Street", "East 74th Street", "East 85th Street", "East 92nd Street", "Sports Club New York", "West 76th Street", "West 92nd Street", "Bryant Park", "East 43rd Street", "East 44th Street", "East 53rd Street", "East 54th Street", "Park Avenue", "Rockefeller Center", "West 50th Street", "Bond St.", "Brookfield Place", "Flatiron", "Gramercy", "Greenwich Ave", "High Line", "Orchard St", "Printing House", "SoHo", "Tribeca", "Wall Street", "Brooklyn Heights", "DUMBO", "Williamsburg", "Great Neck", "Roslyn", "Woodbury", "Armonk", "Mamaroneck", "Scarsdale"],
@@ -910,9 +1190,9 @@ eventData = {
 			"song_length": (60, 300)
 		}
 	},
-	"navient": {
-		"write_key": "0XtlULesfknbWHM4m5HSD1sDx0H2I1WR",
-		"eventsWithProps": ["Signup Started", "Signup Completed", "Account Summary Viewed", "Payment Started", "Payment Completed", "Recent Payments Viewed", "Repayment Options Viewed", "Repayment Plan Selected", "Payment Pause Requested", "Loan Forgiveness Options Viewed", "Payment Scheduled", "Help Center Viewed", "Help Center Item Viewed", "Loan Refinance Viewed", "Loan Refinance Requested"],
+	"loanadmin": {
+		"write_key": "LF9wPACGkQ5VU9mH7iJcYE3MN5lgCBQd",
+		"eventsWithProps": ["Signup Started", "Signup Completed", "Account Summary Viewed", "Payment Started", "Payment Completed", "Recent Payments Viewed", "Repayment Options Viewed", "Repayment Plan Selected", "Payment Pause Requested", "Loan Forgiveness Options Viewed", "Payment Scheduled", "Help Center Viewed", "Help Center Item Viewed", "Loan Refinance Viewed", "Loan Refinance Requested", "Rate Calculator Launched","Rate Calculator - Get Quote", "Quote Viewed","Quote Accepted","Skip Payment"],
 		"eventsNoProps": [],
 
 		"strings": {
@@ -920,9 +1200,16 @@ eventData = {
 			"help_center_question": ["Can I pay more than my monthly payment amount?", "How do I pay with special instructions?", "How do I qualify for a repayment plan based on my income?", "How do I know whether to request a deferment or forbearance?", "As a military service member, what are my benefits and how do I request them?"],
 			"help_center_topic": ["Payments", "Auto Pay", "Payment Options", "Technical Support"],
 			"current_feature": ["Scheduled Payments", "Live Chat", "Repayment Planner", "Help Center"],
-			"plan_type": ["Revised Pay-As-You-Earn", "Pay-As-You-Earn", "Income-Based Repayment", "Income-Contingent Repayment", "Income-Sensitive Repayment", "Direct Consolidation"],
-			"loan_status": ["Active Payments", "Deferment", "Forbearance"]
-
+			"loan_type": ["Refinance","Private Loan","Personal Loan"],
+			"loan_repayment": ["Revised Pay-As-You-Earn", "Pay-As-You-Earn", "Income-Based Repayment", "Income-Contingent Repayment", "Income-Sensitive Repayment", "Direct Consolidation"],
+			"resource_category": ["Student Loan Refinancing","Private Student Loans","Personal Loans","Calculator","Guide"],
+			"resource_title": ["Student Loan Consolidation","Fixed Rates vs Variable Rates","What is a 10-Day Payoff?","What is Precision Pricing?","Loan Application Tips","How Much Does College Cost?","8 Ways to Pay for College","How to Read Your Financial Aid Award Letter","When to Refinance Credit Card Debt","Home Equity Loan or Personal Loan?","How to Pay for Graduate Education","How to Refinance Student Loans","Decision Making Guide"],
+			"content_category": ["Student Loan Refinancing","Private Student Loans","Personal Loans","Calculator","Guide"],
+			"content_title": ["Student Loan Consolidation","Fixed Rates vs Variable Rates","What is a 10-Day Payoff?","What is Precision Pricing?","Loan Application Tips","How Much Does College Cost?","8 Ways to Pay for College","How to Read Your Financial Aid Award Letter","When to Refinance Credit Card Debt","Home Equity Loan or Personal Loan?","How to Pay for Graduate Education","How to Refinance Student Loans","Decision Making Guide"],
+			"blog_title": ["Paying Off Student Loans? Try the 20% Rule","What's The Difference Between a Hard Credit Check and Soft Credit Check?","How to Build Credit in 6 Easy, Smart Steps"],
+			"loan_status": ["Active Payments", "Deferment", "Forbearance"],
+			"loan_rate": [2.05,3.45],
+			"loan_rate_type": ["fixed","variable"]
 		},
 		"traits": {},
 		"ints": {
@@ -997,7 +1284,101 @@ eventData = {
 			"lifetime_value": (0,500),
 			"product_NPS": (1,5)
 			}
-	}
+	},	
+	"wisdompanel": {
+		"write_key": "zrkfJ5CjMlnwX60V7UdP2n5oi9sMbcn9",
+		"eventsWithProps": ["Breed Viewed","Get Started","Order Completed","Kit Activated","Sample Report Viewed","'How It Works' Viewed","Blog Post Viewed","Blog Post Shared","Add to Cart","Shop Launched","Product Viewed","Address Confirmed","Cart Viewed","Cart Abandoned","Report Viewed","Email Sent","Report Ready","Kit Registered"],
+		"eventsNoProps": [],
+
+		"strings": {
+			"current_platform": ["Web","iOS", "Android"],
+			"gift?": [True,False],
+			"breed": ["Affenpinscher","Dalmatian","Alaskan Malamute","English Cocker Spaniel","Entlebucher Mountain Dog","Pembroke Welsh Corgi","Papillon","Otterhound","French Bulldog","Pug","Grand Basset Griffon Vendeen","Pyrenean Mastiff","Pumi","Kerry Blue Terrier","Spanish Water Dog","Xoloitzcuintli","Yorkshire Terrier","Whippet","Miniature Pinscher"],
+			"breed_traits":["Intelligent","Hard-Working","Athletic","Energetic","Caring","Enjoys Running"],
+			"discount_code":["None","VETERANS20","VETERANS30"],
+			"product":["Breed Detection", "Breed + Disease Detection"],
+			"blog_topic":["Breed & Genetics","Pet Health","Life With Pets","Behavior"],
+			"current_status":["Anonymous Prospect","Known Prospect","Purchased","Cart","Report Analyzed"]
+		},
+		"traits": {},
+		"ints": {
+			"lifetime_value": (0,500),
+			"lifetime_report_views": (0,20),
+			"product_NPS": (1,5)
+			}
+	},
+	"raymour": {
+		"write_key": "osdQT9xG8NgOmxHqP9vHtbctTbYuza2l", #web
+		# "write_key": "aSlRfDYmBPd5rHfAft00PMWThuAAk5BQ", #android
+		# "write_key": "wDWBo9AZxkmraaLNrBmlL2fpGotEb6py", #ios
+		# "write_key": "kzsPqn2c2ZYptugnrMoUhWTyx4h0FrgL", #python
+		"eventsWithProps": ["In-Store Visit", "Appointment Set", "Page Viewed", "Products Searched", "Product List Viewed", "Product List Filtered", "Promotion Viewed", "Promotion Clicked", "Product Clicked", "Product Viewed", "Product Added", "Product Removed", "Cart Viewed", "Checkout Started", "Checkout Step Viewed", "Checkout Step Completed", "Payment Info Entered", "Order Completed", "Order Updated", "Order Refunded", "Order Cancelled", "Loyalty Signup Started", "Loyalty Signup Completed", "Catalog Signup", "Return Initiated", "Return Complete", "Gift Card Purchased", "Store Locator Activated","View Today's Offers", "Store Finder Launched", "Size Guide Launched", "App Installed", "App Downloaded", "App Launched", "Cart Abandoned", "View Coupon", "Receive Coupon", "Use Coupon", "Credit Line Info Viewed","Credit Line Application Started","Credit Line Application Submitted", "Credit Line Approved","[Bronto] Email Opened","[Bronto] Email Sent", "[Bronto] Email Clickthrough", "[Optimize] Personalization Delivered", "[Optimize] Personalization Interaction"],
+		"eventsNoProps": [],
+
+		"strings": {
+			"order_type": ["In-Store Digital", "In-Store POS", "Web"],
+			"coupon_code": ["FRIENDS30","SUMMERTIME"],
+			"current_sale": ["30% Customer Appreciation Sale","25% Off Rugs"],
+			"day_of_week": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+			"time_of_day": ["Early Morning","Morning","Afternoon","Late Afternoon","Evening"],
+			"product_L1_category": ["Living Rooms","Dining Rooms","Bedrooms","Mattresses","Kids","Office","Outdoor","Rugs","Outlet","Sale"],
+			"product_L2_category": ["Sofas & Sectionals","Chairs & Recliners","Entertainment","Tables & Storage","Great Values", "Tables & Storage","Seating","Dining Accessories"],
+			"product_L3_category": ["Sofas","Sectionals","Sleeper Sofas","Loveseats","Futons","Chaise Lounges","Settees","Ottomans","Living Room Chairs","Recliners","Accent Chairs","Stools","Benches"],
+			"store_type": ["Flagship","Outlet"],
+			"product_name": ["Skye Microfiber Power Reclining Sofa","Corliss Sofa","McKinley Sofa", "Shiloh Sofa", "Colton Sofa","Kristoff Sofa","Quincey Power-Reclining Sofa","Toby Reclining Sofa","Stanton Reclining Sofa"],
+			"product_color":["beige","black","blue","brown","copper","gray"],
+			"search_filters": ["Special Offers","Price","Style","Color","Finish","Fabric"],
+			# "search_filter_detail": [{"Style":"Contemporary","Price":"$2000-$2500"}],
+			"current_platform": ["Web", "In-Store", "Mobile Web", "Mobile Native"],
+			"messaging_preferences": ["Push", "Email", "Text"],
+			"messaging_status": ["Opt-In"],
+			"loyalty_status": ["None", "Active", "Premium"],
+			"credit_card_member": [True,False],
+			"social_channel": ["Instagram", "Facebook", "Pinterest", "Twitter", "YouTube"],
+			"utm_campaign": ["spring-2020"],
+			"credit_tier": ["high","medium","low"],
+			# "current_brand": ["1-800-Flowers", "Harry & David", "1-800 Baskets", "Simply Chocolate", "Cheryl's Cookies", "Personalization Universe", "The Popcorn Factory", "Wolferman's", "Stock Yards", "Goodsey"]
+		},
+		"ints": {
+			"price": 5000,
+			"credit_limit": 10000,
+			"discount_%": 30,
+			"coupon_%": 30,
+			"lifetime_value": (0,50000),
+			"search_results": (0,25),
+			"hour_of_day": (6,23),
+			"quantity": (1,5),
+			"store_id": (1111,9999),
+			"region_id": (111,999),
+			"items_in_cart": (1,5),
+			"color_options": (1,5)
+		}
+	},	
+	"natgen": {
+		"write_key": "LaE3TNSLEN41b6APwplNGrWfSc6nNTBB",
+		"eventsWithProps": ["App Launched","Landing Page Loaded","Quote Request Submitted","Saved Quotes Retrieved","Quote Reviewed","Quote Accepted","Call Logged","Policy Documents Viewed","Marketing Page Viewed","Policy Renewed","Policy Canceled","Claim Started","Claim Submitted","Claim Result Viewed","Payment Submitted","Quick Pay Submitted"],
+		"eventsNoProps": [],
+
+		"strings": {
+			"policy_type": ["Auto","RV","Homeowners","Renters"],
+			"additional_coverage": ["Flood","Earthquake","Fungi/Mold","Equipment Breakdown"],
+			"payment_schedule": ["Upfront","Monthly","Mortgage Escrow"],
+			"payment_type": ["Quick Pay","Phone","In-Branch"],
+			"current_platform": ["Web", "In-Branch", "Mobile Web", "Mobile Native"],
+			"claim_type": ["Auto Accident","Natural Disaster","Weather","Ordinance","Water Backup","Damage"],
+			"messaging_preferences": ["Push", "Email", "Text"],
+			"messaging_status": ["Opt-In"],
+			"social_channel": ["Instagram", "Facebook", "Pinterest", "Twitter", "YouTube"],
+			"utm_campaign": ["spring-2020"],
+			"credit_tier": ["high","medium","low"]
+		},
+		"ints": {
+			"price": 5000,
+			"policy_amount": 5000000,
+			"dependents": 3,
+			"zip_code": (11111,99999)
+		}
+	},
 }
 
 
@@ -1079,12 +1460,13 @@ d2 = datetime.datetime.now()
 randomUserList = json.loads(open('demodata.json', 'rU').read()) #read from local file instead
 
 for iteration in range(NUMBER_OF_USERS):
-	time.sleep(0.8)
+	time.sleep(DELAY_BETWEEN_USERS)
 	random_user = str(uuid.uuid4())
 
 	firstName = random.choice(randomUserList['firstNames'])
 	lastName = random.choice(randomUserList['lastNames'])
 	location = random.choice(randomUserList['cities'])
+
 
 	# try:
 	# 	currentUser = randomUserList[iteration]
@@ -1097,11 +1479,11 @@ for iteration in range(NUMBER_OF_USERS):
 	userName = reformat(firstName + " " + lastName + " DEMO")
 	userEmail = reformat(firstName.lower()+'.'+lastName.lower()+'.DEMO@example.com')
 
-	if industry == "ibm_cloud": #generate fake emails for ~20%
-		if random.randint(0,100) < 20:
-			fakeWord = "+"+random.choice(["1", "2", "3", "demo", "abcd", "qwerty", "again", "999", "9999", "newtrial", "trial"])+"@"
-			userEmail = userEmail.replace("@", fakeWord)
-			print "fake email generated: "+userEmail
+	# if industry == "ibm_cloud": #generate fake emails for ~20%
+	# 	if random.randint(0,100) < 20:
+	# 		fakeWord = "+"+random.choice(["1", "2", "3", "demo", "abcd", "qwerty", "again", "999", "9999", "newtrial", "trial"])+"@"
+	# 		userEmail = userEmail.replace("@", fakeWord)
+	# 		print "fake email generated: "+userEmail
 
 
 	if anonymize == True:
@@ -1118,14 +1500,33 @@ for iteration in range(NUMBER_OF_USERS):
 	userDOB = str(dobMonth).zfill(2)+'/'+str(dobDay).zfill(2)+'/'+str(dobYear)
 	userAge = today.year - dobYear - ((today.month, today.day) < (dobMonth, dobYear))
 	userPhone = '('+str(random.randint(111,999))+') '+str(random.randint(111,999))+'-'+str(random.randint(1111,9999))
+	businessPhone = '('+str(random.randint(111,999))+') '+str(random.randint(111,999))+'-'+str(random.randint(1111,9999))
 	userLTV = random.randint(0, 3000)
 	userCity = location['city']
 	userState = location['state']
+	userConsentStatus = random.choice(["opt-out-marketing", "opt-out-emails", "opt-out-push", "opt-out-all", "subscribed"])
+	consent_email = random.choice([True, False])
+	consent_push = random.choice([True, False])
+	consent_mktg = random.choice([True, False])
+	consent_transactional = random.choice([True, False])
+
+	homeAddress = str(random.randint(10,100)) + ' ' + random.choice(randomUserList['lastNames']) + ' St, ' + userCity + ', ' + userState 
+	businessAddress = str(random.randint(10,100)) + ' ' + random.choice(randomUserList['lastNames']) + ' St, ' + userCity + ', ' + userState 
+
+	# print homeAddress
+	# print businessAddress
+
 
 	userTraits = {
 		"name": userName, "email": userEmail, "birthday": userDOB,
-		"age": userAge, "phone": userPhone, "lifetime_value": userLTV ,
-		"address": {"city": userCity, "state": userState}
+		"age": userAge, "phone": userPhone, "phone_business": businessPhone, "lifetime_value": userLTV ,
+		"address": {"address_home": homeAddress, "address_business": businessAddress,
+		"city": userCity, "state": userState}, 
+		"address_home": homeAddress,
+		"address_business": businessAddress,
+		"consent_status": userConsentStatus, "consent_email": consent_email,
+		"consent_push": consent_push, "consent_mktg": consent_mktg,
+		"consent_transactional": consent_transactional
 	}
 
 	if addSensitiveInfo:
@@ -1141,12 +1542,31 @@ for iteration in range(NUMBER_OF_USERS):
 			userTraits[customTrait] = random.choice(eventData[industry]["traits"][customTrait])
 			print customTrait, userTraits[customTrait]
 	userTraits.update(contextProperties)
-	analytics.identify(random_user, userTraits, {"externalIds": [
-		{"id": userPhone, "type": "phone", "collection": "users", "encoding": "none"},
-		{"id": str(uuid.uuid4()), "type": "mobile_device_id", "collection": "users", "encoding": "none"},
-		{"id": str(uuid.uuid4()), "type": "cookie_id", "collection": "users", "encoding": "none"},
-		{"id": str(uuid.uuid4()), "type": "cross_domain_id", "collection": "users", "encoding": "none"},
-		]}, anonymous_id=anonId)
+
+	userExternalIds = [
+		{
+			"id": userPhone, 
+			"type": "personal_phone", 
+			"collection": "users", "encoding":"none"},
+		{
+			"id": businessPhone, 
+			"type": "business_phone", 
+			"collection": "users", "encoding":"none"},
+		{
+			"id": str(uuid.uuid4()), 
+			"type": "member_id", 
+			"collection": "users", "encoding":"none"},
+		{
+			"id": str(uuid.uuid4()), 
+			"type": "individual_id", 
+			"collection": "users","encoding":"none"},
+		{
+			"id": str(uuid.uuid4()), 
+			"type": "mobile_device_id", 
+			"collection": "users","encoding":"none"}
+		]
+
+	analytics.identify(random_user, userTraits, context={"externalIds": userExternalIds}, anonymous_id=anonId)
 
 	groupProps = False
 	if sendGroupCall:
@@ -1154,7 +1574,21 @@ for iteration in range(NUMBER_OF_USERS):
 		groupProps = {'company_id': userGroup[0], 'company_name': userGroup[1], 'industry': userGroup[2], "client_ARR": random.randint(0,500000), "client_DAU": random.randint(0,50)}
 		analytics.group(random_user, userGroup[0], groupProps)
 
+	hospitalityOwnerships = []
+	if industry=="wyndham":
+		hospitalityMembershipId = random.randint(1111,9999)
+		hospitalityMembershipName = userName.split(' ')[1]+'-'+str(hospitalityMembershipId)
+		analytics.group(random_user, hospitalityMembershipId, {"name": hospitalityMembershipName})
+		analytics.group(random_user, "121", {"name": "Reinhardt-121"})
 
+		# hospitalityOwnerships = []
+		for i in xrange(0,random.randint(2,8)):
+			ownershipLocation = random.choice(eventData[industry]["strings"]["location"])
+			ownershipNightlyPrice = random.randint(100,3000)
+			ownershipAssetId = random.randint(11111,99999)
+			ownershipObj = {"Location": ownershipLocation, "Exchange Fee": ownershipNightlyPrice, "Property ID": ownershipAssetId}
+			hospitalityOwnerships.append(ownershipObj)
+		analytics.identify(random_user, {"Ownerships": hospitalityOwnerships})
 
 	NUMBER_OF_EVENTS = random.randint(5, 50)
 	elapsed_seconds = time.time() - start_time
@@ -1171,6 +1605,8 @@ for iteration in range(NUMBER_OF_USERS):
 		eventName = random.choice(eventData[industry]["eventsWithProps"])
 		randomTimestamp = randomDate(d1, d2)
 		eventProperties = {}
+		if hospitalityOwnerships:
+			eventProperties.update({'Ownerships': hospitalityOwnerships})
 
 		for stringProp in eventData[industry]["strings"]:
 			stringPropValue = random.choice(eventData[industry]["strings"][stringProp])
@@ -1190,7 +1626,9 @@ for iteration in range(NUMBER_OF_USERS):
 			eventProperties.update({intProp: intPropValue})
 
 		eventProperties.update({"email": userEmail}) #including email on all calls per Mailchimp requirement
-		analytics.identify(random_user, eventProperties, anonymous_id=anonId)
+		analytics.identify(random_user, eventProperties, anonymous_id=anonId, context={"externalIds": userExternalIds})
+		
+		
 
 		if groupProps:
 			eventProperties.update(groupProps)	
