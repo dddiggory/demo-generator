@@ -7,4 +7,5 @@ and left just a handful of industry templates for your reference.
 
 # To use:
 python EventGenerator2.py [INDUSTRY] [NUMBER OF USERS]
+
 e.g., python EventGenerator2.py saas 1000
